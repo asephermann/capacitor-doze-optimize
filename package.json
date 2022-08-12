@@ -1,25 +1,81 @@
 {
-  "name": "cordova-plugin-doze-optimize",
-  "version": "0.1.0",
-  "description": "If you want to run your application in background mode and it shoud standby even battery optimization enabled, then this Cordova plugin is used to check the doze or battery optimization status and also it help to request whitlest popup for battery optimization",
-  "cordova": {
-    "id": "cordova-plugin-doze-optimize",
-    "platforms": [
-      "android"
-    ]
-  },
+  "name": "capacitor-doze-optimize",
+  "version": "0.0.1",
+  "description": "White listing an Android application programmatically from battery optimize settings",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "unpkg": "dist/plugin.js",
+  "files": [
+    "android/src/main/",
+    "android/build.gradle",
+    "dist/",
+    "ios/Plugin/",
+    "CapacitorDozeOptimize.podspec"
+  ],
+  "author": "Asep Herman Nursalam",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thomas550i/cordova-plugin-doze-Optimize.git"
+    "url": "git+https://github.com/asephermann/capacitor-doze-optimize.git"
+  },
+  "bugs": {
+    "url": "https://github.com/asephermann/capacitor-doze-optimize/issues"
   },
   "keywords": [
-    "ecosystem:cordova",
-    "cordova-android"
+    "capacitor",
+    "plugin",
+    "native"
   ],
-  "author": "thomas550i",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/thomas550i/cordova-plugin-doze-Optimize/issues"
+  "scripts": {
+    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
+    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin && cd ..",
+    "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "verify:web": "npm run build",
+    "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
+    "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
+    "eslint": "eslint . --ext ts",
+    "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
+    "swiftlint": "node-swiftlint",
+    "docgen": "docgen --api DozeOptimizePlugin --output-readme README.md --output-json dist/docs.json",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
+    "clean": "rimraf ./dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
   },
-  "homepage": "https://github.com/thomas550i/cordova-plugin-doze-Optimize#readme"
+  "devDependencies": {
+    "@capacitor/android": "^3.0.0",
+    "@capacitor/core": "^3.0.0",
+    "@capacitor/docgen": "^0.0.18",
+    "@capacitor/ios": "^3.0.0",
+    "@ionic/eslint-config": "^0.3.0",
+    "@ionic/prettier-config": "^1.0.1",
+    "@ionic/swiftlint-config": "^1.1.2",
+    "eslint": "^7.11.0",
+    "prettier": "~2.2.0",
+    "prettier-plugin-java": "~1.0.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.32.0",
+    "swiftlint": "^1.0.1",
+    "typescript": "~4.0.3"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^3.0.0"
+  },
+  "prettier": "@ionic/prettier-config",
+  "swiftlint": "@ionic/swiftlint-config",
+  "eslintConfig": {
+    "extends": "@ionic/eslint-config/recommended"
+  },
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    },
+    "android": {
+      "src": "android"
+    }
+  },
+  "dependencies": {
+    "docgen": "^0.0.1"
+  }
 }
