@@ -8,7 +8,28 @@ White listing an Android application programmatically from battery optimize sett
 npm install capacitor-doze-optimize
 npx cap sync
 ```
+## Example
 
+
+```typescript
+import { DozeOptimize } from 'capacitor-doze-optimize';
+
+
+initDozeOptimize = async () => {
+    // check if battery optimizations is ignoring
+    const isIgnoringBatteryOptimizations = await DozeOptimize.isIgnoringBatteryOptimizations();
+
+    // request battery optimizations menu and unrestrict battery optimizations for this app, add to whitelist
+    await DozeOptimize.requestOptimizationsMenu();
+
+    // check if data saver is ignoring
+    const isDataSaverOn = await DozeOptimize.isIgnoringDataSaver();
+
+    // open setting data saver menu and unrestrict data saver for this app, add to whitelist
+    await DozeOptimize.requestDataSaverMenu();
+  }
+
+```
 ## API
 
 <docgen-index>
