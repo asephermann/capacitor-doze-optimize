@@ -8,13 +8,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
-import android.util.Log
 import com.getcapacitor.JSObject
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
-
 
 @CapacitorPlugin(name = "DozeOptimize")
 class DozeOptimizePlugin : Plugin() {
@@ -62,9 +60,13 @@ class DozeOptimizePlugin : Plugin() {
                 if (isIgnoring) {
                     intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
                     ret.put("messages", "requested")
-                }else{
+                } else {
                     intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
                     intent.data = Uri.parse("package:$packageName")
+//                    https://stackoverflow.com/questions/55794316/action-ignore-battery-optimization-settings-need-intent-to-all-apps-list?rq=1
+//                    including the line "intent.setData(Uri.parse("package:" + packageName));" can get your application blocked by google play. use it without this line –
+//                    kfir
+//                    Nov 12, 2019 at 11:44
 
                     ret.put("messages", "Optimizations Requested Successfully")
                 }
