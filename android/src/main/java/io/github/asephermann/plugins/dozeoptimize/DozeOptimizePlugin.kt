@@ -14,9 +14,13 @@ import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 
+
 @CapacitorPlugin(name = "DozeOptimize")
 class DozeOptimizePlugin : Plugin() {
 
+    /**
+     * return true if in App's Battery settings "Not optimized" and false if "Optimizing battery use"
+     */
     @PluginMethod
     fun isIgnoringBatteryOptimizations(call: PluginCall) {
 
@@ -56,10 +60,9 @@ class DozeOptimizePlugin : Plugin() {
 
                 val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
                 val isIgnoring = pm.isIgnoringBatteryOptimizations(packageName)
-
                 if (isIgnoring) {
                     intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
-                    ret.put("messages", "requested")
+                    ret.put("messages", "ignored")
                 } else {
                     intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
                     intent.data = Uri.parse("package:$packageName")
@@ -67,11 +70,35 @@ class DozeOptimizePlugin : Plugin() {
 //                    including the line "intent.setData(Uri.parse("package:" + packageName));" can get your application blocked by google play. use it without this line –
 //                    kfir
 //                    Nov 12, 2019 at 11:44
-
                     ret.put("messages", "Optimizations Requested Successfully")
                 }
+
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(intent)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+
+//                if (isIgnoring) {
+//                    val res: Resources = context.resources
+//                    val applicationName: CharSequence = res.getText(
+//                        res.getIdentifier(
+//                            "app_name",
+//                            "string", context.packageName
+//                        )
+//                    )
+//
+//                    val alertDialog: AlertDialog = AlertDialog.Builder(context).create()
+//                    alertDialog.setTitle("Battery Usage")
+//                    alertDialog.setMessage("Battery optimization -> All apps -> $applicationName -> Don't optimize")
+//                    alertDialog.setButton(
+//                        AlertDialog.BUTTON_POSITIVE, "OK"
+//                    ) { _, _ -> context.startActivity(intent) }
+//                    alertDialog.setButton(
+//                        AlertDialog.BUTTON_NEUTRAL, "CANCEL"
+//                    ) { dialog, _ -> dialog.dismiss() }
+//                    alertDialog.show()
+//                } else {
+                    context.startActivity(intent)
+//                }
 
                 ret.put("isRequested", true)
             } else {
